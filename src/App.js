@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        {/* <nav className="navbar navbar-expand-lg navbar-light">
+        <nav className="navbar navbar-expand-lg navbar-light">
           <a className="navbar-brand" href="#">
             <img
               src="https://images.vexels.com/media/users/3/137577/isolated/preview/75b3c8a4aba24222274e4ea2f2aa52ab-cube-geometric-abstract-logo-by-vexels.png"
@@ -30,9 +30,10 @@ class App extends Component {
               </li>
             </ul>
           </div>
-        </nav> */}
-
-        <Routing />
+        </nav>
+        <div className="container">
+          <Routing />
+        </div>
       </div>
     );
   }
