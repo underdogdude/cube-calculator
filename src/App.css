@@ -5,3 +5,8 @@ body {
 nav {
   background: #fff;
 }
+
+.sub-text {
+  color: #ccc;
+  font-size: 12px;
+}
