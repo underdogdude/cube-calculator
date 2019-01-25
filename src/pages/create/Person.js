@@ -2,46 +2,85 @@ import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 export default class Person extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startDate: new Date()
+      date: new Date(),
+      name: '',
+      gender: 'male',
+      birthdate: new Date(),
+      height: '',
+      weight: '',
+      bmr: '',
+      tdde: '1.2',
+      calGoal: '',
+      fat: '',
+      fatGoal: '',
+      visfat: '',
+      visfatGoal: '',
+      bone: '',
+      boneGoal: '',
+      water: '',
+      muscle: '',
+      bmi: '',
+      bmiGoal: '',
+      bodyage: '',
+      bodyageGoal: ''
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
   }
 
   handleChange(date) {
     this.setState({
-      startDate: date
+      birthdate: date
     });
   }
-
-  handleSubmit(event) {
-    alert('A name was submitted: ');
+  handleSubmit = event => {
     event.preventDefault();
-  }
+    this.props.history.push({
+      pathname: '/summary',
+      state: this.state
+    });
+  };
 
   render() {
+    var options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
     return (
       <div className="p-5">
-        <h4>Date : </h4>
+        <h4>Date : {this.state.date.toLocaleDateString('en-US', options)} </h4>
         <form onSubmit={this.handleSubmit}>
           <div className="card">
             <div className="card-body">
               <h2>Personal Infomation</h2>
               <div className="row pt-4">
                 <div className="col-md-2">
-                  <img
+                  {/* <img
                     src="https://banner2.kisspng.com/20180320/ykw/kisspng-shoulder-human-behavior-neck-business-communicatio-user-male-5ab0eff5089198.6616975015215452050351.jpg"
                     alt="user-img"
                     className="img-fluid"
-                  />
+                  /> */}
                 </div>
-                <div className="col-md-10">
+                <div className="col-md-9">
                   <div className="form-group row">
                     <label className="col-sm-2 col-form-label">Full Name</label>
                     <div className="col-sm-10">
@@ -49,6 +88,10 @@ export default class Person extends Component {
                         type="text"
                         className="form-control"
                         placeholder="Enter your Full Name"
+                        value={this.state.name}
+                        name="name"
+                        onChange={this.handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -58,23 +101,24 @@ export default class Person extends Component {
                       <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect pr-3">
                         <input
                           type="radio"
-                          id="option-1"
                           className="mdl-radio__button"
-                          name="options"
-                          value="1"
-                          defaultChecked
+                          name="gender"
+                          value="male"
+                          checked={this.state.gender === 'male'}
+                          onChange={this.handleInputChange}
                         />
-                        <span className="mdl-radio__label">Men</span>
+                        <span className="mdl-radio__label">Male</span>
                       </label>
                       <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect">
                         <input
                           type="radio"
-                          id="option-2"
                           className="mdl-radio__button"
-                          name="options"
-                          value="2"
+                          name="gender"
+                          value="female"
+                          onChange={this.handleInputChange}
+                          checked={this.state.gender === 'female'}
                         />
-                        <span className="mdl-radio__label">Women</span>
+                        <span className="mdl-radio__label">Female</span>
                       </label>
                     </div>
                   </div>
@@ -86,7 +130,7 @@ export default class Person extends Component {
                       <DatePicker
                         className="form-control"
                         style={{ width: '100%' }}
-                        selected={this.state.startDate}
+                        selected={this.state.birthdate}
                         onChange={this.handleChange}
                       />
                     </div>
@@ -99,6 +143,10 @@ export default class Person extends Component {
                         type="number"
                         className="form-control"
                         placeholder="Enter your height"
+                        required
+                        value={this.state.height}
+                        name="height"
+                        onChange={this.handleInputChange}
                       />{' '}
                       (cm.)
                     </div>
@@ -111,6 +159,10 @@ export default class Person extends Component {
                         type="number"
                         className="form-control"
                         placeholder="Enter your Full Name"
+                        required
+                        value={this.state.weight}
+                        name="weight"
+                        onChange={this.handleInputChange}
                       />{' '}
                       (kg.)
                     </div>
@@ -123,6 +175,10 @@ export default class Person extends Component {
                         type="number"
                         className="form-control"
                         placeholder="BMR"
+                        value={this.state.bmr}
+                        name="bmr"
+                        onChange={this.handleInputChange}
+                        required
                       />
                     </div>
                   </div>
@@ -135,11 +191,25 @@ export default class Person extends Component {
                         type="number"
                         className="form-control"
                         placeholder="TDDE"
+                        value={this.state.tdde}
+                        name="tdde"
+                        onChange={this.handleInputChange}
                       >
-                        <option>Heavy Exercise</option>
-                        <option>Heavy Exercise</option>
-                        <option>Heavy Exercise</option>
-                        <option>Heavy Exercise</option>
+                        <option value="1.2">
+                          Sedentary Office Job = BMR x 1.2
+                        </option>
+                        <option value="1.375">
+                          Light Exercise (1-2 day/week) = BMR x 1.375
+                        </option>
+                        <option value="1.55">
+                          Moderate Exercise (3-5 days/week) = BMR x 1.55{' '}
+                        </option>
+                        <option value="1.725">
+                          Heavy Exercise (6-7 days/week) = BMR x 1.725
+                        </option>
+                        <option value="1.9">
+                          Athlete (x2 per day) = BMR x 1.9
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -151,13 +221,23 @@ export default class Person extends Component {
                     </label>
                     <div className="col-sm-10">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         placeholder="Calories Goal"
+                        value={this.state.calGoal}
+                        name="calGoal"
+                        onChange={this.handleInputChange}
+                        required
                       />
                     </div>
                   </div>
                 </div>
+                <div className="col-md-1" />
+              </div>
+              <div className="p-3 text-right">
+                <span className="text-danger float-right">
+                  Note : All Field are required.{' '}
+                </span>
               </div>
             </div>
           </div>
@@ -166,34 +246,34 @@ export default class Person extends Component {
               <h2>Body Composition</h2>
               <div className="row form-group">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     FAT%
                   </label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="fat"
                       placeholder="Fat%"
+                      value={this.state.fat}
+                      name="fat"
+                      onChange={this.handleInputChange}
+                      required
                     />
                   </div>
                 </div>
                 <div className="col-md-4 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label"
-                  >
-                    Goal
-                  </label>
+                  <label className="col-sm-3 col-form-label">Goal</label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="fatGoal"
                       placeholder="Goal"
+                      value={this.state.fatGoal}
+                      name="fatGoal"
+                      onChange={this.handleInputChange}
+                      required
                     />
                   </div>
                 </div>
@@ -201,34 +281,34 @@ export default class Person extends Component {
               {/* VIS FAT */}
               <div className="row form-group">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     VISCEREAL FAT%
                   </label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="visfat"
                       placeholder="VISCEREAL FAT%"
+                      value={this.state.visfat}
+                      name="visfat"
+                      onChange={this.handleInputChange}
+                      required
                     />
                   </div>
                 </div>
                 <div className="col-md-4 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label"
-                  >
-                    Goal
-                  </label>
+                  <label className="col-sm-3 col-form-label">Goal</label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="visfatGoal"
                       placeholder="Goal"
+                      name="visfatGoal"
+                      onChange={this.handleInputChange}
+                      value={this.state.visfatGoal}
+                      required
                     />
                   </div>
                 </div>
@@ -236,34 +316,34 @@ export default class Person extends Component {
               {/* BONE */}
               <div className="row form-group mt-3">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     BONE%
                   </label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="bone"
                       placeholder="BONE%"
+                      name="bone"
+                      onChange={this.handleInputChange}
+                      value={this.state.bone}
+                      required
                     />
                   </div>
                 </div>
                 <div className="col-md-4 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label"
-                  >
-                    Goal
-                  </label>
+                  <label className="col-sm-3 col-form-label">Goal</label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="boneGoal"
                       placeholder="Goal"
+                      name="boneGoal"
+                      onChange={this.handleInputChange}
+                      value={this.state.boneGoal}
+                      required
                     />
                   </div>
                 </div>
@@ -271,18 +351,19 @@ export default class Person extends Component {
               {/* Water */}
               <div className="row form-group mt-3">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     WATER%
                   </label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="water"
                       placeholder="WATER%"
+                      name="water"
+                      onChange={this.handleInputChange}
+                      value={this.state.water}
+                      required
                     />
                   </div>
                 </div>
@@ -290,21 +371,27 @@ export default class Person extends Component {
               {/* Muscle */}
               <div className="row form-group mt-3">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     MUSCLE%
                   </label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="muscle"
+                      value={this.state.muscle}
+                      name="muscle"
+                      onChange={this.handleInputChange}
                       placeholder="MUSCLE%"
+                      required
                     />
                   </div>
                 </div>
+              </div>
+              <div className="p-3 text-right">
+                <span className="text-danger float-right">
+                  Note : All Field are required.{' '}
+                </span>
               </div>
             </div>
           </div>
@@ -316,37 +403,36 @@ export default class Person extends Component {
               {/* BMI */}
               <div className="row form-group">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     BMI <br />
                     <i className="sub-text">(Body Mass Indicator)</i>
                   </label>
 
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="bmi"
                       required
                       placeholder="BMI"
+                      name="bmi"
+                      onChange={this.handleInputChange}
+                      value={this.state.bmi}
                     />
                   </div>
                 </div>
                 <div className="col-md-4 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label"
-                  >
-                    Goal
-                  </label>
+                  <label className="col-sm-3 col-form-label">Goal</label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="bmiGoal"
                       placeholder="Goal"
+                      name="bmiGoal"
+                      onChange={this.handleInputChange}
+                      value={this.state.bmiGoal}
+                      required
                     />
                   </div>
                 </div>
@@ -354,37 +440,42 @@ export default class Person extends Component {
               {/* VIS FAT */}
               <div className="row form-group">
                 <div className="col-md-8 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label text-right"
-                  >
+                  <label className="col-sm-3 col-form-label text-right">
                     Body Age
                   </label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="bodyage"
                       placeholder="Body Age"
+                      name="bodyage"
+                      onChange={this.handleInputChange}
+                      value={this.state.bodyage}
+                      required
                     />
                   </div>
                 </div>
                 <div className="col-md-4 row">
-                  <label
-                    for="inputPassword"
-                    className="col-sm-3 col-form-label"
-                  >
-                    Goal
-                  </label>
+                  <label className="col-sm-3 col-form-label">Goal</label>
                   <div className="col-sm-9">
                     <input
-                      type="password"
+                      type="number"
                       className="form-control"
-                      id="inputPassword"
+                      id="bodyageGoal"
                       placeholder="Goal"
+                      value={this.state.bodyageGoal}
+                      name="bodyageGoal"
+                      onChange={this.handleInputChange}
+                      required
                     />
                   </div>
                 </div>
+              </div>
+              <div className="p-3 text-right">
+                <span className="text-danger float-right">
+                  Note : All Field are required.{' '}
+                </span>
               </div>
             </div>
           </div>
