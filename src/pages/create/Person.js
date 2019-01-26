@@ -14,6 +14,7 @@ export default class Person extends Component {
       birthdate: new Date(),
       height: '',
       weight: '',
+      weightGoal: '',
       bmr: '',
       tdde: '1.2',
       calGoal: '',
@@ -24,7 +25,9 @@ export default class Person extends Component {
       bone: '',
       boneGoal: '',
       water: '',
+      waterGoal: '',
       muscle: '',
+      muscleGoal: '',
       bmi: '',
       bmiGoal: '',
       bodyage: '',
@@ -132,6 +135,10 @@ export default class Person extends Component {
                         style={{ width: '100%' }}
                         selected={this.state.birthdate}
                         onChange={this.handleChange}
+                        peekNextMonth
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
                       />
                     </div>
                   </div>
@@ -158,10 +165,27 @@ export default class Person extends Component {
                       <input
                         type="number"
                         className="form-control"
-                        placeholder="Enter your Full Name"
+                        placeholder="Enter your weight"
                         required
                         value={this.state.weight}
                         name="weight"
+                        onChange={this.handleInputChange}
+                      />{' '}
+                      (kg.)
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-sm-2 col-form-label">
+                      Weight Goal
+                    </label>
+                    <div className="col-sm-10">
+                      <input
+                        type="number"
+                        className="form-control"
+                        required
+                        value={this.state.weightGoal}
+                        placeholder="Enter your weight goal"
+                        name="weightGoal"
                         onChange={this.handleInputChange}
                       />{' '}
                       (kg.)
@@ -367,6 +391,21 @@ export default class Person extends Component {
                     />
                   </div>
                 </div>
+                <div className="col-md-4 row">
+                  <label className="col-sm-3 col-form-label">Goal</label>
+                  <div className="col-sm-9">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="waterGoal"
+                      placeholder="Goal"
+                      name="waterGoal"
+                      onChange={this.handleInputChange}
+                      value={this.state.waterGoal}
+                      required
+                    />
+                  </div>
+                </div>
               </div>
               {/* Muscle */}
               <div className="row form-group mt-3">
@@ -383,6 +422,21 @@ export default class Person extends Component {
                       name="muscle"
                       onChange={this.handleInputChange}
                       placeholder="MUSCLE%"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4 row">
+                  <label className="col-sm-3 col-form-label">Goal</label>
+                  <div className="col-sm-9">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id="muscleGoal"
+                      placeholder="Goal"
+                      name="muscleGoal"
+                      onChange={this.handleInputChange}
+                      value={this.state.muscleGoal}
                       required
                     />
                   </div>
