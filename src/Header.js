@@ -24,15 +24,7 @@ export default class Header extends Component {
                   Home <span className="sr-only">(current)</span>
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Features
-                </a>
-              </li>
             </ul>
-            <NavLink to="/create" className="navbar-item">
-              <button className="btn btn-primary">Create +</button>
-            </NavLink>
           </div>
         </div>
       </nav>

@@ -12,25 +12,14 @@ export default class Summary extends Component {
   }
 
   getYear(birthdate) {
-    var date1 = new Date(); //Remember, months are 0 based in JS
-    var date2 = new Date(birthdate);
-    var year1 = date1.getFullYear();
-    var year2 = date2.getFullYear();
-    var month1 = date1.getMonth();
-    var month2 = date2.getMonth();
-    var year = year2 - year1;
+    var diff_ms = Date.now() - birthdate.getTime();
+    var age_dt = new Date(diff_ms);
 
-    if (month2 <= month1) {
-      if (date2.getDate() <= date1.getDate()) {
-        year--;
-      }
-    }
-    return year;
+    return Math.abs(age_dt.getUTCFullYear() - 1970);
   }
-
   getMonth(birthdate) {
-    var date1 = new Date(); //Remember, months are 0 based in JS
-    var date2 = new Date(birthdate);
+    var date1 = new Date(birthdate); //Remember, months are 0 based in JS
+    var date2 = new Date();
     var year1 = date1.getFullYear();
     var year2 = date2.getFullYear();
     var month1 = date1.getMonth();
@@ -47,42 +36,21 @@ export default class Summary extends Component {
     return month;
   }
 
-  // getDate(birthdate) {
+  getDate(birthdate) {
+    var date = new Date();
+    var dateInMonth = new Date(birthdate).getDate();
+    var day = date.getDate() - dateInMonth;
 
-  //     var date = new Date();
-  //     var month = date.getMonth();
-  //     var dateInMonth=new Date(2018, month , 0).getDate();
-  //     var day = dateInMonth - date.getDate();
-  //     return day;
-  // }
+    return day;
+  }
 
   getAge(birthdate) {
     const years = this.getYear(birthdate);
-    const months = this.getMonth(birthdate);
-    // const days = this.getDate(birthdate);
-    console.log(years);
-    console.log(months);
+    const months = this.getMonth(birthdate) % years;
+    const days = this.getDate(birthdate);
+
+    return years + ' Years, ' + months + ' Months, ' + days + ' Days';
   }
-
-  // bmiChecker (bmi) {
-
-  //   var bmi = Number(bmi);
-  //   if (bmi < 18.5) {
-  //     return `<span class="badge badge-info">Underweight</span>`;
-
-  //   }else if (bmi >= 18.5 && bmi < 25 ) {
-  //     return `<span class="badge badge-success">Normal</span>`;
-
-  //   }else if (bmi >= 25 && bmi < 30 ) {
-  //     return `<span class="badge badge-warning">Overweight</span>`;
-
-  //   }else if (bmi >= 30 ) {
-  //     return `<span class="badge badge-danger">Obese</span>`;
-
-  //   }else {
-  //     return '-';
-  //   }
-  // }
 
   render() {
     const options = {
@@ -141,8 +109,10 @@ export default class Summary extends Component {
                             'en-US',
                             options
                           )}{' '}
+                          <span className="sub-text">
+                            {this.getAge(this.state.birthdate)}
+                          </span>
                         </td>
-                        {/* <td> { this.getAge(this.state.birthdate) } </td> */}
                       </tr>
                       <tr>
                         <th scope="row">Height</th>
