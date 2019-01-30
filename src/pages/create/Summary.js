@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Fat from './Fat';
 
 export default class Summary extends Component {
   constructor(props) {
@@ -161,7 +162,13 @@ export default class Summary extends Component {
                     <tbody>
                       <tr>
                         <th scope="row">FAT%</th>
-                        <td> {this.state.fat} </td>
+                        <td>
+                          <Fat
+                            age={this.getYear(this.state.birthdate)}
+                            gender={this.state.gender}
+                            fat={this.state.fat}
+                          />
+                        </td>
                         <th scope="row">Goal</th>
                         <td>{this.state.fatGoal}</td>
                       </tr>
