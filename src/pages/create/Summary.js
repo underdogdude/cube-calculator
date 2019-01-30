@@ -21,10 +21,14 @@ export default class Summary extends Component {
   }
 
   getYear(birthdate) {
-    var diff_ms = Date.now() - birthdate.getTime();
-    var age_dt = new Date(diff_ms);
-
-    return Math.abs(age_dt.getUTCFullYear() - 1970);
+    var today = new Date();
+    var birthDate = new Date(birthdate);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   }
   getMonth(birthdate) {
     var date1 = new Date(birthdate); //Remember, months are 0 based in JS
