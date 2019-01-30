@@ -1,6 +1,7 @@
 {
   "projects": {
     "yes": "cube-calculator",
-    "default": "cube-calculator"
+    "default": "cube-calculator",
+    "after add fat": "cube-calculator"
   }
 }

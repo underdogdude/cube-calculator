@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import Fat from './Fat';
+import firebase from 'firebase';
 
 export default class Summary extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    console.log(props);
+    firebase
+      .database()
+      .ref('user-' + props.history.location.state.name + '/')
+      .set({
+        data: props.history.location.state
+      });
   }
 
   componentWillMount() {
