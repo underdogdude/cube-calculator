@@ -20,9 +20,9 @@ export default class Header extends Component {
           >
             <ul className="navbar-nav">
               <li className="nav-item active">
-                <a className="nav-link" href="#">
+                <NavLink to="/" className="nav-link">
                   Home <span className="sr-only">(current)</span>
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>
