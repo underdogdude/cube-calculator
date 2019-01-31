@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 
 import { withRouter } from 'react-router-dom';
+import { throws } from 'assert';
 
 export default class Person extends Component {
   constructor(props) {
@@ -55,10 +57,18 @@ export default class Person extends Component {
   }
   handleSubmit = event => {
     event.preventDefault();
-    this.props.history.push({
-      pathname: '/summary',
-      state: this.state
-    });
+    this.setState(
+      {
+        birthdateShow: moment(this.state.birthdate).format('YYYY-MM-DD'),
+        dateShow: moment(this.state.date).format('YYYY-MM-DD')
+      },
+      () => {
+        this.props.history.push({
+          pathname: '/summary',
+          state: this.state
+        });
+      }
+    );
   };
 
   render() {
@@ -139,6 +149,8 @@ export default class Person extends Component {
                         showMonthDropdown
                         showYearDropdown
                         dropdownMode="select"
+                        dateFormat="dd/MM/yyyy"
+                        maxDate={new Date()}
                       />
                     </div>
                   </div>

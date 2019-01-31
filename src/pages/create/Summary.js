@@ -6,18 +6,26 @@ export default class Summary extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    console.log(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
     firebase
       .database()
-      .ref('user-' + props.history.location.state.name + '/')
-      .set({
-        data: props.history.location.state
+      .ref('user/')
+      .push({
+        data: this.props.history.location.state,
+        name: this.props.history.location.state.name
       });
+
+    this.props.history.push({
+      pathname: '/'
+    });
   }
 
   componentWillMount() {
     this.setState(this.props.location.state);
-    console.log(this.props.location.state);
   }
 
   getYear(birthdate) {
@@ -243,6 +251,11 @@ export default class Summary extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="col-md-12 text-center">
+          <button className="btn btn-primary" onClick={this.handleClick}>
+            Save
+          </button>
         </div>
       </div>
     );
