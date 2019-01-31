@@ -24,15 +24,17 @@ export default class Main extends Component {
 
   getData(values) {
     let data = [];
-    Object.keys(values).map(a => {
-      data.push({
-        name: values[a].name,
-        data: values[a].data
+    if (values && values !== 'null' && values !== 'undefined') {
+      Object.keys(values).map(a => {
+        data.push({
+          name: values[a].name,
+          data: values[a].data
+        });
       });
-    });
-    this.setState({
-      user: data
-    });
+      this.setState({
+        user: data
+      });
+    }
   }
 
   handleClick = (e, value) => {

@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
 
 import { withRouter } from 'react-router-dom';
-import { throws } from 'assert';
 
 export default class Person extends Component {
   constructor(props) {
     super(props);
     this.state = {
       date: new Date(),
+      dateShow: '',
       name: '',
       gender: 'male',
       birthdate: new Date(),
+      birthdateShow: '',
       height: '',
       weight: '',
       weightGoal: '',
@@ -57,18 +57,18 @@ export default class Person extends Component {
   }
   handleSubmit = event => {
     event.preventDefault();
-    this.setState(
-      {
-        birthdateShow: moment(this.state.birthdate).format('YYYY-MM-DD'),
-        dateShow: moment(this.state.date).format('YYYY-MM-DD')
-      },
-      () => {
-        this.props.history.push({
-          pathname: '/summary',
-          state: this.state
-        });
-      }
-    );
+    // this.setState(
+    //   {
+    //     birthdateShow: moment(this.state.birthdate).format('YYYY-MM-DD'),
+    //     dateShow: moment(this.state.date).format('YYYY-MM-DD')
+    //   },
+    //   () => {
+    this.props.history.push({
+      pathname: '/summary',
+      state: this.state
+    });
+    //   }
+    // );
   };
 
   render() {

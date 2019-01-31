@@ -1,27 +1,52 @@
 import React, { Component } from 'react';
 import Fat from './Fat';
 import firebase from 'firebase';
+import moment from 'moment';
 
 export default class Summary extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-
+    console.log('in Super');
+    console.log(props);
+    if (props.history.location.state.birthdateShow.length !== 0) {
+      this.state = {
+        birthDate: new Date(
+          Number(props.history.location.state.birthdateShow)
+        ).toString(),
+        date: new Date(Number(props.history.location.state.dateShow)).toString()
+      };
+      console.log('bite');
+    } else {
+      this.state = props;
+    }
+    console.log('this.state');
+    console.log(this.state);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    firebase
-      .database()
-      .ref('user/')
-      .push({
-        data: this.props.history.location.state,
-        name: this.props.history.location.state.name
-      });
+    this.setState(
+      {
+        birthdateShow: moment(this.state.birthdate).format('x'),
+        dateShow: moment(this.state.date).format('x')
+      },
+      () => {
+        console.log('Before to DAtabase');
+        console.log(this.state);
+        firebase
+          .database()
+          .ref('user/')
+          .push({
+            data: this.state,
+            name: this.props.history.location.state.name
+          });
 
-    this.props.history.push({
-      pathname: '/'
-    });
+        this.props.history.push({
+          pathname: '/'
+        });
+      }
+    );
   }
 
   componentWillMount() {
@@ -102,7 +127,7 @@ export default class Summary extends Component {
       badge = '-';
     }
     // }
-
+    console.log(this.state.birthDate);
     return (
       <div>
         <h1>Summary</h1>
@@ -125,11 +150,12 @@ export default class Summary extends Component {
                       <tr>
                         <th scope="row">Date of Birth</th>
                         <td>
-                          {' '}
-                          {this.state.birthdate.toLocaleDateString(
+                          {this.state.birthDate}
+                          {/* {this.state.birthdate.toLocaleDateString(
                             'en-US',
                             options
-                          )}{' '}
+                          )}{' '} */}
+
                           <span className="sub-text">
                             {this.getAge(this.state.birthdate)}
                           </span>
