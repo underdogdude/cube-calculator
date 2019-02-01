@@ -9,7 +9,8 @@ export default class Main extends Component {
     super(props);
 
     this.state = {
-      user: []
+      user: [],
+      loading: true
     };
 
     firebase
@@ -17,6 +18,9 @@ export default class Main extends Component {
       .ref('/user')
       .once('value', snapshot => {
         this.getData(snapshot.val());
+        this.setState({
+          loading: false
+        });
       });
 
     this.handleClick = this.handleClick.bind(this);
@@ -71,26 +75,37 @@ export default class Main extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              {this.state.user.length ? (
-                this.state.user.reverse().map((user, idx) => {
-                  return (
-                    <div className="card mt-3" key={idx}>
-                      <div className="card-body d-flex justify-content-between">
-                        <strong>{user.name}</strong>
+              {!this.state.loading ? (
+                this.state.user.length ? (
+                  this.state.user.reverse().map((user, idx) => {
+                    return (
+                      <div className="card mt-3" key={idx}>
+                        <div className="card-body d-flex justify-content-between">
+                          <strong>{user.name}</strong>
 
-                        <button
-                          className="btn btn-link"
-                          onClick={e => this.handleClick(e, user)}
-                        >
-                          ดูข้อมูล
-                        </button>
+                          <button
+                            className="btn btn-link"
+                            onClick={e => this.handleClick(e, user)}
+                          >
+                            ดูข้อมูล
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
+                ) : (
+                  <div className="text-center sub-text">
+                    <p> กดปุ่ม Create เพื่อสร้างใหม่</p>
+                  </div>
+                )
               ) : (
-                <div className="text-center sub-text">
-                  <p>ไม่มีข้อมูล กดปุ่ม Create เพื่อสร้างใหม่</p>
+                <div className="text-center">
+                  <div className="lds-ellipsis">
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                  </div>
                 </div>
               )}
             </div>
