@@ -67,9 +67,9 @@ export default class Main extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              {this.state.user.map(user => {
+              {this.state.user.map((user, idx) => {
                 return (
-                  <div className="card mt-3" key={user.name}>
+                  <div className="card mt-3" key={idx}>
                     <div className="card-body d-flex justify-content-between">
                       <strong>{user.name}</strong>
 

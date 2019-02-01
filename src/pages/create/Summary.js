@@ -6,51 +6,53 @@ import moment from 'moment';
 export default class Summary extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    console.log('in Super');
-    console.log(props);
-    if (props.history.location.state.birthdateShow.length !== 0) {
-      this.state = {
-        birthDate: new Date(
-          Number(props.history.location.state.birthdateShow)
-        ).toString(),
-        date: new Date(Number(props.history.location.state.dateShow)).toString()
-      };
-      console.log('bite');
-    } else {
-      this.state = props;
-    }
-    console.log('this.state');
-    console.log(this.state);
+
+    // if (props.history.location.state.birthdateShow.length !== 0) {
+    //   this.state = props.history.location.state;
+    //   console.log('state 1' , this.state);
+    //   this.state = {
+    //     birthDate: new Date(
+    //       Number(props.history.location.state.birthdateShow)
+    //     ).toString(),
+    //     date: new Date(Number(props.history.location.state.dateShow)).toString()
+    //   };
+    //   console.log('state 2', this.state);
+    // } else {
+    //   this.state = props.history.location.state;
+    // }
+    // console.log(this.state);
+    this.state = props.history.location.state;
+    console.log('state in super ', this.state);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    this.setState(
-      {
-        birthdateShow: moment(this.state.birthdate).format('x'),
-        dateShow: moment(this.state.date).format('x')
-      },
-      () => {
-        console.log('Before to DAtabase');
-        console.log(this.state);
-        firebase
-          .database()
-          .ref('user/')
-          .push({
-            data: this.state,
-            name: this.props.history.location.state.name
-          });
+    // this.setState(
+    //   {
+    //     birthdateShow: moment(this.state.birthdate).format('x'),
+    //     dateShow: moment(this.state.date).format('x')
+    //   },
+    //   () => {
+    //     console.log('Before to DAtabase');
+    //     console.log(this.state);
+    firebase
+      .database()
+      .ref('user/')
+      .push({
+        data: this.state,
+        name: this.props.history.location.state.name
+      });
 
-        this.props.history.push({
-          pathname: '/'
-        });
-      }
-    );
+    this.props.history.push({
+      pathname: '/'
+    });
+    //   }
+    // );
   }
 
   componentWillMount() {
-    this.setState(this.props.location.state);
+    console.log('will mount');
+    // this.setState(this.props.location.state);
   }
 
   getYear(birthdate) {
@@ -282,8 +284,12 @@ export default class Summary extends Component {
             </div>
           </div>
         </div>
-        <div className="col-md-12 text-center">
-          <button className="btn btn-primary" onClick={this.handleClick}>
+        <div className="col-md-12 text-center mt-4 mb-4">
+          <button
+            className="btn btn-primary btn-lg mt-4 mb-4"
+            onClick={this.handleClick}
+            style={{ minWidth: '300px' }}
+          >
             Save
           </button>
         </div>
