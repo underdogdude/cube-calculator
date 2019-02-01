@@ -7,97 +7,127 @@ export default class Summary extends Component {
   constructor(props) {
     super(props);
 
-    // if (props.history.location.state.birthdateShow.length !== 0) {
-    //   this.state = props.history.location.state;
-    //   console.log('state 1' , this.state);
-    //   this.state = {
-    //     birthDate: new Date(
-    //       Number(props.history.location.state.birthdateShow)
-    //     ).toString(),
-    //     date: new Date(Number(props.history.location.state.dateShow)).toString()
-    //   };
-    //   console.log('state 2', this.state);
-    // } else {
-    //   this.state = props.history.location.state;
-    // }
-    // console.log(this.state);
     this.state = props.history.location.state;
-    console.log('state in super ', this.state);
+    console.log(this.state);
+
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    // this.setState(
-    //   {
-    //     birthdateShow: moment(this.state.birthdate).format('x'),
-    //     dateShow: moment(this.state.date).format('x')
-    //   },
-    //   () => {
-    //     console.log('Before to DAtabase');
-    //     console.log(this.state);
     firebase
       .database()
       .ref('user/')
       .push({
-        data: this.state,
-        name: this.props.history.location.state.name
+        birthdate: this.state.birthdate,
+        date: this.state.date,
+        data: this.state.data,
+        name: this.props.history.location.state.data.name
       });
 
     this.props.history.push({
       pathname: '/'
     });
-    //   }
-    // );
   }
 
   componentWillMount() {
     console.log('will mount');
-    // this.setState(this.props.location.state);
   }
 
-  getYear(birthdate) {
-    var today = new Date();
-    var birthDate = new Date(birthdate);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
+  getAge(dateString) {
+    var now = new Date();
+    var today = new Date(now.getYear(), now.getMonth(), now.getDate());
+
+    var yearNow = now.getYear();
+    var monthNow = now.getMonth();
+    var dateNow = now.getDate();
+
+    var dob = new Date(
+      dateString.substring(6, 10),
+      dateString.substring(0, 2) - 1,
+      dateString.substring(3, 5)
+    );
+
+    var yearDob = dob.getYear();
+    var monthDob = dob.getMonth();
+    var dateDob = dob.getDate();
+    var age = {};
+
+    let yearAge = yearNow - yearDob;
+
+    if (monthNow >= monthDob) var monthAge = monthNow - monthDob;
+    else {
+      yearAge--;
+      var monthAge = 12 + monthNow - monthDob;
     }
+
+    if (dateNow >= dateDob) var dateAge = dateNow - dateDob;
+    else {
+      monthAge--;
+      var dateAge = 31 + dateNow - dateDob;
+
+      if (monthAge < 0) {
+        monthAge = 11;
+        yearAge--;
+      }
+    }
+
+    age = {
+      years: yearAge,
+      months: monthAge,
+      days: dateAge
+    };
+
     return age;
   }
-  getMonth(birthdate) {
-    var date1 = new Date(birthdate); //Remember, months are 0 based in JS
-    var date2 = new Date();
-    var year1 = date1.getFullYear();
-    var year2 = date2.getFullYear();
-    var month1 = date1.getMonth();
-    var month2 = date2.getMonth();
-    if (month1 === 0) {
-      //Have to take into account
-      month1++;
-      month2++;
-    }
-    var month = (year2 - year1) * 12 + (month2 - month1);
-    if (date2.getDate() <= date1.getDate()) {
-      month--;
-    }
-    return month;
+
+  textAge(date) {
+    let age = this.getAge(date);
+    var ageString = '';
+    var yearString = '';
+    var monthString = '';
+    var dayString = '';
+
+    if (age.years > 1) yearString = ' years';
+    else yearString = ' year';
+    if (age.months > 1) monthString = ' months';
+    else monthString = ' month';
+    if (age.days > 1) dayString = ' days';
+    else dayString = ' day';
+
+    if (age.years > 0 && age.months > 0 && age.days > 0)
+      ageString =
+        age.years +
+        yearString +
+        ', ' +
+        age.months +
+        monthString +
+        ', and ' +
+        age.days +
+        dayString +
+        ' old.';
+    else if (age.years == 0 && age.months == 0 && age.days > 0)
+      ageString = 'Only ' + age.days + dayString + ' old!';
+    else if (age.years > 0 && age.months == 0 && age.days == 0)
+      ageString = age.years + yearString + ' old. Happy Birthday!!';
+    else if (age.years > 0 && age.months > 0 && age.days == 0)
+      ageString =
+        age.years + yearString + ' and ' + age.months + monthString + ' old.';
+    else if (age.years == 0 && age.months > 0 && age.days > 0)
+      ageString =
+        age.months + monthString + ' and ' + age.days + dayString + ' old.';
+    else if (age.years > 0 && age.months == 0 && age.days > 0)
+      ageString =
+        age.years + yearString + ' and ' + age.days + dayString + ' old.';
+    else if (age.years == 0 && age.months > 0 && age.days == 0)
+      ageString = age.months + monthString + ' old.';
+    else ageString = 'Oops! Could not calculate age!';
+
+    return ageString;
   }
 
-  getDate(birthdate) {
-    var date = new Date();
-    var dateInMonth = new Date(birthdate).getDate();
-    var day = date.getDate() - dateInMonth;
-
-    return day;
-  }
-
-  getAge(birthdate) {
-    const years = this.getYear(birthdate);
-    const months = this.getMonth(birthdate) % years;
-    const days = this.getDate(birthdate);
-
-    return years + ' Years, ' + months + ' Months, ' + days + ' Days';
+  setDate(timestamp) {
+    let date = moment(Number(timestamp)).format('DD/MM/YYYY');
+    return date;
   }
 
   render() {
@@ -115,7 +145,7 @@ export default class Summary extends Component {
       '1.9': 'Athlete (x2 per day) = BMR x 1.9'
     };
     // const  bmiChecker =  (bmi) => {
-    var bmi = Number(this.state.bmi);
+    var bmi = Number(this.state.data.bmi);
     var badge = '';
     if (bmi < 18.5) {
       badge = `<span class="badge badge-info">Underweight</span>`;
@@ -129,7 +159,7 @@ export default class Summary extends Component {
       badge = '-';
     }
     // }
-    console.log(this.state.birthDate);
+
     return (
       <div>
         <h1>Summary</h1>
@@ -143,53 +173,48 @@ export default class Summary extends Component {
                     <tbody>
                       <tr>
                         <th scope="row">Name</th>
-                        <td>{this.state.name}</td>
+                        <td>{this.state.data.name}</td>
                       </tr>
                       <tr>
                         <th scope="row">Gender</th>
-                        <td>{this.state.gender}</td>
+                        <td>{this.state.data.gender}</td>
                       </tr>
                       <tr>
                         <th scope="row">Date of Birth</th>
                         <td>
-                          {this.state.birthDate}
-                          {/* {this.state.birthdate.toLocaleDateString(
-                            'en-US',
-                            options
-                          )}{' '} */}
-
-                          <span className="sub-text">
-                            {this.getAge(this.state.birthdate)}
+                          {this.setDate(this.state.birthdate)}
+                          <span className="sub-text pl-2">
+                            {this.textAge(this.setDate(this.state.birthdate))}
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <th scope="row">Height</th>
-                        <td> {this.state.height} </td>
+                        <td> {this.state.data.height} </td>
                       </tr>
                       <tr>
                         <th scope="row">Weight</th>
-                        <td> {this.state.weight} </td>
+                        <td> {this.state.data.weight} </td>
                       </tr>
                       <tr>
                         <th scope="row">Weight Goal</th>
-                        <td> {this.state.weightGoal} </td>
+                        <td> {this.state.data.weightGoal} </td>
                       </tr>
                       <tr>
                         <th scope="row">BMR</th>
-                        <td> {this.state.bmr} </td>
+                        <td> {this.state.data.bmr} </td>
                       </tr>
                       <tr>
                         <th scope="row">TDDE</th>
-                        <td>{tdde[this.state.tdde]}</td>
+                        <td>{tdde[this.state.data.tdde]}</td>
                       </tr>
                       <tr>
                         <th scope="row">Calories Goal</th>
                         <td>
                           {' '}
-                          <b>{this.state.calGoal}</b>{' '}
+                          <b>{this.state.data.calGoal}</b>{' '}
                           <span className="sub-text">
-                            less than ({this.state.calGoal} cal daily.)
+                            less than ({this.state.data.calGoal} cal daily.)
                           </span>
                         </td>
                       </tr>
@@ -212,37 +237,39 @@ export default class Summary extends Component {
                         <th scope="row">FAT%</th>
                         <td>
                           <Fat
-                            age={this.getYear(this.state.birthdate)}
-                            gender={this.state.gender}
-                            fat={this.state.fat}
+                            age={this.getAge(
+                              this.setDate(this.state.birthdate)
+                            )}
+                            gender={this.state.data.gender}
+                            fat={this.state.data.fat}
                           />
                         </td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.fatGoal}</td>
+                        <td>{this.state.data.fatGoal}</td>
                       </tr>
                       <tr>
                         <th scope="row">VISCEREAL FAT%</th>
-                        <td>{this.state.visfat}</td>
+                        <td>{this.state.data.visfat}</td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.visfatGoal}</td>
+                        <td>{this.state.data.visfatGoal}</td>
                       </tr>
                       <tr>
                         <th scope="row">BONE%</th>
-                        <td>{this.state.bone}</td>
+                        <td>{this.state.data.bone}</td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.boneGoal}</td>
+                        <td>{this.state.data.boneGoal}</td>
                       </tr>
                       <tr>
                         <th scope="row">WATER%</th>
-                        <td>{this.state.water}</td>
+                        <td>{this.state.data.water}</td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.waterGoal}</td>
+                        <td>{this.state.data.waterGoal}</td>
                       </tr>
                       <tr>
                         <th scope="row">Muscle%</th>
-                        <td>{this.state.muscle}</td>
+                        <td>{this.state.data.muscle}</td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.muscleGoal}</td>
+                        <td>{this.state.data.muscleGoal}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -265,17 +292,20 @@ export default class Summary extends Component {
                           <p className="sub-text mb-0">(Body Mass Indicator)</p>
                         </th>
                         <td>
-                          {this.state.bmi}{' '}
-                          <span dangerouslySetInnerHTML={{ __html: badge }} />
+                          {this.state.data.bmi}
+                          <span
+                            className="pl-2"
+                            dangerouslySetInnerHTML={{ __html: badge }}
+                          />
                         </td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.bmiGoal}</td>
+                        <td>{this.state.data.bmiGoal}</td>
                       </tr>
                       <tr>
                         <th scope="row">Body Age</th>
-                        <td>{this.state.bodyage}</td>
+                        <td>{this.state.data.bodyage}</td>
                         <th scope="row">Goal</th>
-                        <td>{this.state.bodyageGoal}</td>
+                        <td>{this.state.data.bodyageGoal}</td>
                       </tr>
                     </tbody>
                   </table>

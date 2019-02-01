@@ -9,11 +9,9 @@ export default class Person extends Component {
     super(props);
     this.state = {
       date: new Date(),
-      dateShow: '',
       name: '',
       gender: 'male',
       birthdate: new Date(),
-      birthdateShow: '',
       height: '',
       weight: '',
       weightGoal: '',
@@ -57,18 +55,22 @@ export default class Person extends Component {
   }
   handleSubmit = event => {
     event.preventDefault();
-    this.setState(
-      {
-        birthdateShow: moment(this.state.birthdate).format('x'),
-        dateShow: moment(this.state.date).format('x')
-      },
-      () => {
-        this.props.history.push({
-          pathname: '/summary',
-          state: this.state
-        });
+    // this.setState(
+    //   {
+    //     birthdate: moment(this.state.birthdate).format('x'),
+    //     date: moment(this.state.date).format('x')
+    //   },
+    //   () => {
+    this.props.history.push({
+      pathname: '/summary',
+      state: {
+        data: this.state,
+        date: moment(this.state.date).format('x'),
+        birthdate: moment(this.state.birthdate).format('x')
       }
-    );
+    });
+    // }
+    // );
   };
 
   render() {

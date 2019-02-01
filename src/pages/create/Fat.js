@@ -4,13 +4,16 @@ const fat = props => {
   return (
     <div>
       {props.fat}
-      <span dangerouslySetInnerHTML={{ __html: fatValidate(props) }} />
+      <span
+        className="pl-2"
+        dangerouslySetInnerHTML={{ __html: fatValidate(props) }}
+      />
     </div>
   );
 };
 
 const fatValidate = props => {
-  let age = Number(props.age);
+  let age = Number(props.age.years);
   let fat = Number(props.fat);
 
   switch (props.gender) {
@@ -25,7 +28,7 @@ const fatValidate = props => {
         } else if (fat >= 25 && fat < 50) {
           return `<span class="badge badge-danger">Obese</span>`;
         } else {
-          console.log('Undefined');
+          return `<span class="badge  badge-secondary">N/a</span>`;
         }
       } else if (age >= 40 && age <= 59) {
         if (fat >= 0 && fat < 10) {
@@ -37,7 +40,7 @@ const fatValidate = props => {
         } else if (fat >= 28.5 && fat < 50) {
           return `<span class="badge badge-danger">Obese</span>`;
         } else {
-          console.log('Undefined');
+          return `<span class="badge  badge-secondary">N/a</span>`;
         }
       } else if (age >= 60 && age <= 79) {
         if (fat >= 0 && fat < 12.2) {
@@ -49,10 +52,10 @@ const fatValidate = props => {
         } else if (fat >= 30 && fat < 50) {
           return `<span class="badge badge-danger">Obese</span>`;
         } else {
-          console.log('Undefined');
+          return `<span class="badge  badge-secondary">N/a</span>`;
         }
       } else {
-        console.log('Undefined NO Age');
+        return `<span class="badge  badge-secondary">Your age under 20 years old</span>`;
       }
 
       break;
@@ -67,7 +70,7 @@ const fatValidate = props => {
         } else if (fat >= 39.5 && fat < 50) {
           return `<span class="badge badge-danger">Obese</span>`;
         } else {
-          console.log('Undefined');
+          return `<span class="badge  badge-secondary">N/a</span>`;
         }
       } else if (age >= 40 && age <= 59) {
         if (fat >= 0 && fat < 23) {
@@ -79,7 +82,7 @@ const fatValidate = props => {
         } else if (fat >= 40 && fat < 50) {
           return `<span class="badge badge-danger">Obese</span>`;
         } else {
-          console.log('Undefined');
+          return `<span class="badge  badge-secondary">N/a</span>`;
         }
       } else if (age >= 60 && age <= 79) {
         if (fat >= 0 && fat < 24) {
@@ -91,10 +94,10 @@ const fatValidate = props => {
         } else if (fat >= 41.5 && fat < 50) {
           return `<span class="badge badge-danger">Obese</span>`;
         } else {
-          console.log('Undefined');
+          return `<span class="badge  badge-secondary">N/a</span>`;
         }
       } else {
-        console.log('Undefined NO Age');
+        return `<span class="badge  badge-secondary">Your age under 20 years old</span>`;
       }
       break;
     default:
