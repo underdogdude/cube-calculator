@@ -67,22 +67,28 @@ export default class Main extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              {this.state.user.map((user, idx) => {
-                return (
-                  <div className="card mt-3" key={idx}>
-                    <div className="card-body d-flex justify-content-between">
-                      <strong>{user.name}</strong>
+              {this.state.user.length ? (
+                this.state.user.map((user, idx) => {
+                  return (
+                    <div className="card mt-3" key={idx}>
+                      <div className="card-body d-flex justify-content-between">
+                        <strong>{user.name}</strong>
 
-                      <button
-                        className="btn btn-link"
-                        onClick={e => this.handleClick(e, user.data)}
-                      >
-                        ดูข้อมูล
-                      </button>
+                        <button
+                          className="btn btn-link"
+                          onClick={e => this.handleClick(e, user.data)}
+                        >
+                          ดูข้อมูล
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div className="text-center sub-text">
+                  <p>ไม่มีข้อมูล กดปุ่ม Create เพื่อสร้างใหม่</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
