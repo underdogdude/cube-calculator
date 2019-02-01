@@ -55,12 +55,7 @@ export default class Person extends Component {
   }
   handleSubmit = event => {
     event.preventDefault();
-    // this.setState(
-    //   {
-    //     birthdate: moment(this.state.birthdate).format('x'),
-    //     date: moment(this.state.date).format('x')
-    //   },
-    //   () => {
+
     this.props.history.push({
       pathname: '/summary',
       state: {
@@ -69,8 +64,6 @@ export default class Person extends Component {
         birthdate: moment(this.state.birthdate).format('x')
       }
     });
-    // }
-    // );
   };
 
   render() {

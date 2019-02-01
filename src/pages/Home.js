@@ -28,9 +28,13 @@ export default class Main extends Component {
       Object.keys(values).map(a => {
         data.push({
           name: values[a].name,
-          data: values[a].data
+          data: values[a].data,
+          date: values[a].date,
+          birthdate: values[a].birthdate
         });
       });
+      console.log('thisis sa a da');
+      console.log(data);
       this.setState({
         user: data
       });
@@ -68,7 +72,7 @@ export default class Main extends Component {
           <div className="row">
             <div className="col-md-12">
               {this.state.user.length ? (
-                this.state.user.map((user, idx) => {
+                this.state.user.reverse().map((user, idx) => {
                   return (
                     <div className="card mt-3" key={idx}>
                       <div className="card-body d-flex justify-content-between">
@@ -76,7 +80,7 @@ export default class Main extends Component {
 
                         <button
                           className="btn btn-link"
-                          onClick={e => this.handleClick(e, user.data)}
+                          onClick={e => this.handleClick(e, user)}
                         >
                           ดูข้อมูล
                         </button>
