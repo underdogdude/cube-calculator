@@ -29,10 +29,6 @@ export default class Summary extends Component {
     });
   }
 
-  componentWillMount() {
-    console.log('will mount');
-  }
-
   getAge(dateString) {
     var now = new Date();
     var today = new Date(now.getYear(), now.getMonth(), now.getDate());
@@ -43,8 +39,8 @@ export default class Summary extends Component {
 
     var dob = new Date(
       dateString.substring(6, 10),
-      dateString.substring(0, 2) - 1,
-      dateString.substring(3, 5)
+      dateString.substring(3, 5) - 1,
+      dateString.substring(0, 2)
     );
 
     var yearDob = dob.getYear();
